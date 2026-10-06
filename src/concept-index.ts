@@ -33,7 +33,7 @@ export class ConceptIndex {
       }
     }
     const indexSignature = [...conceptNotesByTag]
-      .map(([tag, conceptNotes]) => tag + ">" + conceptNotes.map((note) => note.path).join(","))
+      .map(([tag, conceptNotes]) => tag + ">" + conceptNotes.map((note) => note.path).sort().join(","))
       .sort()
       .join("\n");
     const changed = indexSignature !== this.indexSignature;
