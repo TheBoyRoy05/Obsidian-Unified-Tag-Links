@@ -18,11 +18,13 @@ export default defineConfig(
     languageOptions: {
       globals: { ...globals.browser },
       parserOptions: {
-        projectService: { allowDefaultProject: ["eslint.config.mts", "manifest.json"] },
+        projectService: { allowDefaultProject: ["manifest.json"] },
         tsconfigRootDir: import.meta.dirname,
         extraFileExtensions: [".json"],
       },
     },
   },
-  ...obsidianmd.configs.recommended
+  ...obsidianmd.configs.recommended,
+  // tsc already checks names, and no-undef misreads names resolved inside a `declare module` block.
+  { files: ["**/*.ts"], rules: { "no-undef": "off" } }
 );

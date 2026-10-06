@@ -19,9 +19,11 @@ export class LinkSync {
   async sync(file: TFile): Promise<boolean> {
     const cache = this.app.metadataCache.getFileCache(file);
     if (!cache) return false;
-    const storedTagLinks: unknown = cache.frontmatter?.[TAG_LINKS_PROPERTY];
+
     const desiredConceptNotes = this.desiredConceptNotes(file);
+    const storedTagLinks: unknown = cache.frontmatter?.[TAG_LINKS_PROPERTY];
     if (storedTagLinks === undefined && desiredConceptNotes.size === 0) return false;
+
     if (
       storedTagLinks !== undefined &&
       desiredConceptNotes.size > 0 &&
@@ -33,6 +35,7 @@ export class LinkSync {
     const tagLinks = [...desiredConceptNotes.values()]
       .sort((a, b) => a.path.localeCompare(b.path))
       .map((note) => `[[${this.app.metadataCache.fileToLinktext(note, file.path, true)}]]`);
+
     await this.app.fileManager.processFrontMatter(file, (frontmatter: Record<string, unknown>) => {
       if (tagLinks.length) frontmatter[TAG_LINKS_PROPERTY] = tagLinks;
       else delete frontmatter[TAG_LINKS_PROPERTY];
@@ -44,11 +47,13 @@ export class LinkSync {
     const conceptNotesByPath = new Map<string, TFile>();
     const cache = this.app.metadataCache.getFileCache(file);
     if (!cache || this.isExcluded(file)) return conceptNotesByPath;
+
     const tags = [...(getAllTags(cache) ?? []), ...this.conceptIndex.tagAliasesOf(file)];
     for (const tag of tags) {
       for (const ancestorTag of ancestryDeepestFirst(tag)) {
         const conceptNotes = this.conceptIndex.conceptNotesFor(ancestorTag).filter((note) => note !== file);
         if (conceptNotes.length === 0) continue;
+
         for (const note of conceptNotes) conceptNotesByPath.set(note.path, note);
         break;
       }

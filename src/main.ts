@@ -1,8 +1,8 @@
-import { Notice, Plugin, TFile, normalizePath, parseFrontMatterAliases, type EventRef, type Menu } from "obsidian";
+import { Notice, Plugin, TFile, normalizePath, parseFrontMatterAliases, type Menu } from "obsidian";
 import { ConceptIndex } from "./concept-index";
 import { LinkSync } from "./link-sync";
 import { isInFolders, type Settings } from "./settings";
-import { canonical, isTagAlias, stripHash, tagAt } from "./tags";
+import { canonical, aliasIsTag, stripHash, tagAt } from "./tags";
 import { CREATE_NEW, PromoteModal, type PromoteChoice } from "./ui/promote-modal";
 import { SettingsTab } from "./ui/settings-tab";
 
@@ -84,22 +84,6 @@ export default class UnifiedTagLinks extends Plugin {
     return tag.split("/").join(" ");
   }
 
-  scheduleFullSync(): void {
-    window.clearTimeout(this.pendingFullSync);
-    this.pendingFullSync = window.setTimeout(() => void this.fullSync(false), EDIT_SETTLE_MS);
-  }
-
-  async promote(tag: string, choice: PromoteChoice): Promise<void> {
-    const file = choice === CREATE_NEW ? await this.createConceptNote(tag) : choice;
-    await this.app.fileManager.processFrontMatter(file, (frontmatter: Record<string, unknown>) => {
-      const aliases = parseFrontMatterAliases(frontmatter) ?? [];
-      if (!aliases.some((alias) => isTagAlias(alias) && canonical(alias) === canonical(tag))) aliases.push("#" + tag);
-      frontmatter.aliases = aliases;
-      delete frontmatter.alias;
-    });
-    new Notice(`Promoted #${tag} to ${file.basename}`);
-  }
-
   private start(): void {
     if (this.ready) return;
     this.ready = true;
@@ -114,6 +98,11 @@ export default class UnifiedTagLinks extends Plugin {
     if (!this.ready || file.extension !== "md") return;
     if (this.conceptIndex.rebuild()) this.scheduleFullSync();
     else this.scheduleSync(file);
+  }
+
+  scheduleFullSync(): void {
+    window.clearTimeout(this.pendingFullSync);
+    this.pendingFullSync = window.setTimeout(() => void this.fullSync(false), EDIT_SETTLE_MS);
   }
 
   private scheduleSync(file: TFile): void {
@@ -148,12 +137,21 @@ export default class UnifiedTagLinks extends Plugin {
     );
   }
 
+  async promote(tag: string, choice: PromoteChoice): Promise<void> {
+    const file = choice === CREATE_NEW ? await this.createConceptNote(tag) : choice;
+    await this.app.fileManager.processFrontMatter(file, (frontmatter: Record<string, unknown>) => {
+      const aliases = parseFrontMatterAliases(frontmatter) ?? [];
+      if (!aliases.some((alias) => aliasIsTag(alias) && canonical(alias) === canonical(tag))) aliases.push("#" + tag);
+      frontmatter.aliases = aliases;
+    });
+    new Notice(`Promoted #${tag} to ${file.basename}`);
+  }
+
   private async demote(file: TFile): Promise<void> {
     await this.app.fileManager.processFrontMatter(file, (frontmatter: Record<string, unknown>) => {
-      const aliases = (parseFrontMatterAliases(frontmatter) ?? []).filter((alias) => !isTagAlias(alias));
+      const aliases = (parseFrontMatterAliases(frontmatter) ?? []).filter((alias) => !aliasIsTag(alias));
       if (aliases.length) frontmatter.aliases = aliases;
       else delete frontmatter.aliases;
-      delete frontmatter.alias;
     });
     new Notice(`Demoted ${file.basename}`);
   }

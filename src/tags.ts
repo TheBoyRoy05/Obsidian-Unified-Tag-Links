@@ -4,7 +4,7 @@ const ALL_DIGITS = /^#\d+$/;
 
 export const stripHash = (tag: string): string => tag.replace(/^#/, "");
 export const canonical = (tag: string): string => stripHash(tag).toLowerCase();
-export const isTagAlias = (alias: unknown): alias is string => typeof alias === "string" && alias.startsWith("#");
+export const aliasIsTag = (alias: unknown): alias is string => typeof alias === "string" && alias.startsWith("#");
 
 export function ancestryDeepestFirst(tag: string): string[] {
   const parts = canonical(tag).split("/");

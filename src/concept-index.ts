@@ -1,5 +1,5 @@
 import { parseFrontMatterAliases, type App, type TFile } from "obsidian";
-import { canonical, isTagAlias } from "./tags";
+import { canonical, aliasIsTag } from "./tags";
 
 export class ConceptIndex {
   private conceptNotesByTag = new Map<string, TFile[]>();
@@ -20,7 +20,7 @@ export class ConceptIndex {
 
   tagAliasesOf(file: TFile): string[] {
     const frontmatter = this.app.metadataCache.getFileCache(file)?.frontmatter;
-    return (parseFrontMatterAliases(frontmatter) ?? []).filter(isTagAlias).map(canonical);
+    return (parseFrontMatterAliases(frontmatter) ?? []).filter(aliasIsTag).map(canonical);
   }
 
   // Returns true when the set of concept notes changed, since only then can other notes' links change.
