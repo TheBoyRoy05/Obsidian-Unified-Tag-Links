@@ -10,7 +10,6 @@ const {
 } = require("obsidian");
 
 const PROPERTY = "tag_links";
-const DEFAULT_SETTINGS = { excludedFolders: ["99 - Meta/Templates"] };
 // Lets a tag finish being typed before the note is rewritten, so "#Obs" never links on its way to "#Obsidian".
 const EDIT_SETTLE_MS = 2000;
 const TAG_IN_LINE = /(?<=^|\s)#[\p{L}\p{N}_/-]+/gu;
@@ -40,7 +39,7 @@ function sameKeys(a, b) {
 
 module.exports = class UnifiedTagLinks extends Plugin {
   async onload() {
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    this.settings = { excludedFolders: [], ...(await this.loadData()) };
     this.conceptNotes = new Map();
     this.conceptSignature = "";
     this.pendingSyncs = new Map();
