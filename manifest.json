@@ -1,7 +1,7 @@
 {
   "id": "unified-tag-links",
   "name": "Unified Tag Links",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "minAppVersion": "1.4.4",
   "description": "Links every note carrying a promoted tag to that tag's concept note, through a managed tag_links property.",
   "author": "Issac Roy",
