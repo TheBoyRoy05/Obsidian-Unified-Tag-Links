@@ -42,6 +42,10 @@ Changes are written about 2 seconds after you stop editing, so a tag is not link
 
 Without Tag Wrangler, Promote is available from the editor menu only, and a renamed tag needs its alias updated by hand.
 
+## Vault access
+
+The plugin reads every Markdown note in the vault to find tags and concept notes. It writes only the `tag_links` property, the `aliases` property when you promote or demote, and the new note when Promote creates one. It makes no network requests.
+
 ## Installation
 
 The plugin is not in the community plugin directory yet. Install it with [BRAT](https://github.com/TfTHacker/obsidian42-brat):
