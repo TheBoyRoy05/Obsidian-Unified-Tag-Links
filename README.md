@@ -1,6 +1,6 @@
 # Unified Tag Links
 
-An Obsidian plugin that links tags to notes. 
+An [Obsidian](https://obsidian.md/) plugin that links tags to notes. 
 
 Suppose I have an `#Obsidian` tag and an `[[Obsidian]]` note. The benefit of the tag is that I can refer to subtags, e.g. `#Obsidian/Graph`, without having to refer to a dead / empty note, e.g. `[[Obsidian Graph]]`. The benefit of the note is that it's linkable and you can visualize the connections through the graph view.
 
