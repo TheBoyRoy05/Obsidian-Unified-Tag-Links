@@ -44,12 +44,15 @@ Without Tag Wrangler, Promote is available from the editor menu only, and a rena
 
 ## Installation
 
-The plugin is not in the community plugin directory. To install it manually:
+The plugin is not in the community plugin directory yet. Install it with [BRAT](https://github.com/TfTHacker/obsidian42-brat):
 
-1. From your vault folder, run 
-```sh
-git clone git@github.com:TheBoyRoy05/Obsidian-Unified-Tag-Links.git .obsidian/plugins/unified-tag-links/
-```
-2. In Obsidian, open **Settings -> Community plugins** and enable **Unified Tag Links**.
+1. Install and enable **BRAT** from **Settings -> Community plugins**.
+2. Run **BRAT: Plugins: Add a beta plugin for testing** and enter `TheBoyRoy05/Obsidian-Unified-Tag-Links`.
 
-Requires Obsidian 1.4.4 or later. Works on desktop and mobile. There is no build step: `main.js` is the plugin.
+BRAT installs the latest release and keeps it updated.
+
+Requires Obsidian 1.4.4 or later. Works on desktop and mobile.
+
+## Development
+
+Clone into `.obsidian/plugins/unified-tag-links/` of a test vault, then run `npm install` and `npm run dev` to rebuild `main.js` on every save. `npm test` runs the test suite.
