@@ -1,6 +1,6 @@
 {
   "name": "unified-tag-links",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Links every note carrying a promoted tag to that tag's concept note.",
   "main": "main.js",
   "type": "module",
