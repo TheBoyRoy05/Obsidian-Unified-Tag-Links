@@ -120,19 +120,31 @@ describe("LinkSync", () => {
     expect(vault.frontmatter(template)[TAG_LINKS_PROPERTY]).toBeUndefined();
   });
 
-  it("never links a tag a concept note excludes, but still links its siblings", async () => {
+  it("never links a subtag under an excluded wildcard, but still links its siblings", async () => {
     const { vault, syncAll } = setup();
-    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin"] });
-    const plugin = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin/*"] });
+    const dataview = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    const plugin = vault.add("Plugins.md", {}, ["#Obsidian/Plugin"]);
     const graph = vault.add("Graph.md", {}, ["#Obsidian/Graph"]);
     await syncAll();
-    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toBeUndefined();
+    expect(vault.frontmatter(dataview)[TAG_LINKS_PROPERTY]).toBeUndefined();
+    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian]]"]);
     expect(vault.frontmatter(graph)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian]]"]);
+  });
+
+  it("excludes only the exact tag when the entry has no wildcard", async () => {
+    const { vault, syncAll } = setup();
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin"] });
+    const plugin = vault.add("Plugins.md", {}, ["#Obsidian/Plugin"]);
+    const dataview = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    await syncAll();
+    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toBeUndefined();
+    expect(vault.frontmatter(dataview)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian]]"]);
   });
 
   it("still links an excluded tag to its own concept note", async () => {
     const { vault, syncAll } = setup();
-    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin"] });
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin/*"] });
     vault.add("Obsidian Plugin.md", { aliases: ["#Obsidian/Plugin"] });
     const plugin = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
     await syncAll();
@@ -144,7 +156,7 @@ describe("LinkSync", () => {
     const obsidian = vault.add("Obsidian.md", { aliases: ["#Obsidian"] });
     const plugin = vault.add("Dataview.md", {}, ["#obsidian/plugin/Dataview"]);
     await syncAll();
-    vault.frontmatter(obsidian)[TAG_LINKS_EXCLUDE_PROPERTY] = "Obsidian/Plugin";
+    vault.frontmatter(obsidian)[TAG_LINKS_EXCLUDE_PROPERTY] = "Obsidian/Plugin/*";
     await syncAll();
     expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toBeUndefined();
   });

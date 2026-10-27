@@ -2,6 +2,7 @@ import { parseFrontMatterAliases, type App, type TFile } from "obsidian";
 import { canonical, aliasIsTag } from "./tags";
 
 export const TAG_LINKS_EXCLUDE_PROPERTY = "tag_links_exclude";
+const SUBTAGS_WILDCARD = "/*";
 
 export class ConceptIndex {
   private conceptNotesByTag = new Map<string, TFile[]>();
@@ -23,8 +24,9 @@ export class ConceptIndex {
 
   private refuses(conceptNote: TFile, tag: string): boolean {
     const tagPath = canonical(tag);
-    return (this.excludedTagsByNote.get(conceptNote.path) ?? []).some(
-      (excluded) => tagPath === excluded || tagPath.startsWith(excluded + "/")
+    return (this.excludedTagsByNote.get(conceptNote.path) ?? []).some((excluded) =>
+      // Drop only the "*": the kept "/" stops "obsidian/plugin/*" matching "obsidian/plugin" or "obsidian/plugins".
+      excluded.endsWith(SUBTAGS_WILDCARD) ? tagPath.startsWith(excluded.slice(0, -1)) : tagPath === excluded
     );
   }
 

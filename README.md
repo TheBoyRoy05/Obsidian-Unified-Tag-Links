@@ -13,7 +13,43 @@ Simply refer to the tag or subtag, e.g. `#Obsidian/Graph`, and the plugin will a
 - **Concept notes.** A note becomes the concept note for a tag when it lists the tag in its aliases, e.g. `aliases: ["#Obsidian"]`.
 - **Managed links.** Each tagged note gets a `tag_links` property holding links to the matching concept notes, automatically created, managed, and deleted by the plugin as needed.
 - **Nested tags.** Matching is case-insensitive and includes subtags. `#Obsidian/Graph` links to the `#Obsidian` concept note, unless `Obsidian/Graph` has a concept note of its own.
-- **Excluded subtags.** A concept note can refuse a branch of its tag by listing it in `tag_links_exclude`. With `tag_links_exclude: ["#Obsidian/Plugin"]` on the `[[Obsidian]]` concept note, `#Obsidian/Plugin/Dataview` does not link to it, but `#Obsidian/Graph` still does.
+- **Excluded tags.** A concept note can refuse tags by listing them in `tag_links_exclude`. An entry matches that exact tag; end it with `/*` to match every subtag under it instead.
+
+### Example
+
+Two concept notes:
+
+```yaml
+# Obsidian.md
+---
+aliases:
+  - "#Obsidian"
+tag_links_exclude:
+  - "#Obsidian/Plugin/*"
+---
+```
+
+```yaml
+# Canvas.md
+---
+aliases:
+  - "#Obsidian/Canvas"
+---
+```
+
+What the plugin writes to `tag_links` on each note:
+
+| Note | `tag_links` | Why |
+| --- | --- | --- |
+| Tagged `#Obsidian` | `[[Obsidian]]` | Exact match |
+| Tagged `#obsidian/graph` | `[[Obsidian]]` | Subtag, case-insensitive |
+| Tagged `#Obsidian/Canvas/Board` | `[[Canvas]]` | Deepest concept note wins |
+| `Canvas.md` | `[[Obsidian]]` | A concept note links to its parent's |
+| Tagged `#Obsidian/Plugin` | `[[Obsidian]]` | `/*` matches only subtags |
+| Tagged `#Obsidian/Plugin/Dataview` | none | Excluded by `#Obsidian/Plugin/*` |
+| Tagged `#Daily` | none | No concept note |
+
+To refuse `#Obsidian/Plugin` itself as well, also list `"#Obsidian/Plugin"`.
 
 ## Usage
 
