@@ -151,6 +151,18 @@ describe("LinkSync", () => {
     expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian Plugin]]"]);
   });
 
+  it("falls back to the next parent's concept note when a deeper one refuses the tag", async () => {
+    const { vault, syncAll } = setup();
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"] });
+    vault.add("Obsidian Plugin.md", {
+      aliases: ["#Obsidian/Plugin"],
+      [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin/Dataview"],
+    });
+    const dataview = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    await syncAll();
+    expect(vault.frontmatter(dataview)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian]]"]);
+  });
+
   it("drops the link when a concept note starts excluding the tag", async () => {
     const { vault, syncAll } = setup();
     const obsidian = vault.add("Obsidian.md", { aliases: ["#Obsidian"] });

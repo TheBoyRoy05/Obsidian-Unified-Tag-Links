@@ -51,6 +51,8 @@ What the plugin writes to `tag_links` on each note:
 
 To refuse `#Obsidian/Plugin` itself as well, also list `"#Obsidian/Plugin"`.
 
+A refused tag falls back to the next parent's concept note. If `Obsidian Plugin.md` had the alias `#Obsidian/Plugin` and excluded `"#Obsidian/Plugin/Dataview"`, a note tagged `#Obsidian/Plugin/Dataview` would still link to `[[Obsidian]]`.
+
 ## Usage
 
 - **Promote a tag:** right-click a tag in the editor and choose **Promote**. Pick an existing note, or create one named after the tag (`Obsidian/Graph` becomes `Obsidian Graph`). The plugin adds the tag alias and links every note carrying the tag.
