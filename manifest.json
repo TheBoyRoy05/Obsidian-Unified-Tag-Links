@@ -5,5 +5,6 @@
   "minAppVersion": "1.4.4",
   "description": "Links every note carrying a promoted tag to that tag's concept note, through a managed tag_links property.",
   "author": "Issac Roy",
-  "isDesktopOnly": false
+  "isDesktopOnly": false,
+  "fundingUrl": "https://buymeacoffee.com/issacroy"
 }

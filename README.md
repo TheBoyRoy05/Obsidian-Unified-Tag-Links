@@ -1,4 +1,14 @@
+<div align="center">
+
 # Unified Tag Links
+
+[![Obsidian downloads](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fobsidianmd%2Fobsidian-releases%2Fmaster%2Fcommunity-plugin-stats.json&query=%24%5B%22unified-tag-links%22%5D.downloads&label=downloads&logo=obsidian&color=7C3AED)](https://obsidian.md/plugins?id=unified-tag-links)
+[![Release](https://img.shields.io/github/v/release/TheBoyRoy05/Obsidian-Unified-Tag-Links?label=release)](https://github.com/TheBoyRoy05/Obsidian-Unified-Tag-Links/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/TheBoyRoy05/Obsidian-Unified-Tag-Links/ci.yml?branch=main&label=CI)](https://github.com/TheBoyRoy05/Obsidian-Unified-Tag-Links/actions/workflows/ci.yml)
+
+<a href="https://buymeacoffee.com/issacroy"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coconut&emoji=%F0%9F%A5%A5&slug=issacroy&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" alt="Buy me a coconut" height="40"></a>
+
+</div>
 
 An [Obsidian](https://obsidian.md/) plugin that links tags to notes. 
 
