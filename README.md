@@ -13,6 +13,7 @@ Simply refer to the tag or subtag, e.g. `#Obsidian/Graph`, and the plugin will a
 - **Concept notes.** A note becomes the concept note for a tag when it lists the tag in its aliases, e.g. `aliases: ["#Obsidian"]`.
 - **Managed links.** Each tagged note gets a `tag_links` property holding links to the matching concept notes, automatically created, managed, and deleted by the plugin as needed.
 - **Nested tags.** Matching is case-insensitive and includes subtags. `#Obsidian/Graph` links to the `#Obsidian` concept note, unless `Obsidian/Graph` has a concept note of its own.
+- **Excluded subtags.** A concept note can refuse a branch of its tag by listing it in `tag_links_exclude`. With `tag_links_exclude: ["#Obsidian/Plugin"]` on the `[[Obsidian]]` concept note, `#Obsidian/Plugin/Dataview` does not link to it, but `#Obsidian/Graph` still does.
 
 ## Usage
 

@@ -51,7 +51,7 @@ export class LinkSync {
     const tags = [...(getAllTags(cache) ?? []), ...this.conceptIndex.tagAliasesOf(file)];
     for (const tag of tags) {
       for (const ancestorTag of ancestryDeepestFirst(tag)) {
-        const conceptNotes = this.conceptIndex.conceptNotesFor(ancestorTag).filter((note) => note !== file);
+        const conceptNotes = this.conceptIndex.conceptNotesFor(ancestorTag, tag).filter((note) => note !== file);
         if (conceptNotes.length === 0) continue;
 
         for (const note of conceptNotes) conceptNotesByPath.set(note.path, note);

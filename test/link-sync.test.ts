@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { App, TFile } from "obsidian";
-import { ConceptIndex } from "../src/concept-index";
+import { ConceptIndex, TAG_LINKS_EXCLUDE_PROPERTY } from "../src/concept-index";
 import { LinkSync, TAG_LINKS_PROPERTY } from "../src/link-sync";
 import { isInFolders } from "../src/settings";
 import { ancestryDeepestFirst, tagAt } from "../src/tags";
@@ -118,5 +118,34 @@ describe("LinkSync", () => {
     const template = vault.add("Templates/Daily.md", { [TAG_LINKS_PROPERTY]: ["[[Obsidian]]"] }, ["#Obsidian"]);
     await syncAll();
     expect(vault.frontmatter(template)[TAG_LINKS_PROPERTY]).toBeUndefined();
+  });
+
+  it("never links a tag a concept note excludes, but still links its siblings", async () => {
+    const { vault, syncAll } = setup();
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin"] });
+    const plugin = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    const graph = vault.add("Graph.md", {}, ["#Obsidian/Graph"]);
+    await syncAll();
+    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toBeUndefined();
+    expect(vault.frontmatter(graph)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian]]"]);
+  });
+
+  it("still links an excluded tag to its own concept note", async () => {
+    const { vault, syncAll } = setup();
+    vault.add("Obsidian.md", { aliases: ["#Obsidian"], [TAG_LINKS_EXCLUDE_PROPERTY]: ["#Obsidian/Plugin"] });
+    vault.add("Obsidian Plugin.md", { aliases: ["#Obsidian/Plugin"] });
+    const plugin = vault.add("Dataview.md", {}, ["#Obsidian/Plugin/Dataview"]);
+    await syncAll();
+    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toEqual(["[[Obsidian Plugin]]"]);
+  });
+
+  it("drops the link when a concept note starts excluding the tag", async () => {
+    const { vault, syncAll } = setup();
+    const obsidian = vault.add("Obsidian.md", { aliases: ["#Obsidian"] });
+    const plugin = vault.add("Dataview.md", {}, ["#obsidian/plugin/Dataview"]);
+    await syncAll();
+    vault.frontmatter(obsidian)[TAG_LINKS_EXCLUDE_PROPERTY] = "Obsidian/Plugin";
+    await syncAll();
+    expect(vault.frontmatter(plugin)[TAG_LINKS_PROPERTY]).toBeUndefined();
   });
 });
