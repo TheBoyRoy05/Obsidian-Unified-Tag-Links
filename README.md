@@ -10,7 +10,7 @@
 
 </div>
 
-An [Obsidian](https://obsidian.md/) plugin that links tags to notes. 
+To answer the age-old question of tags vs notes, why not both? An [Obsidian](https://obsidian.md/) plugin that links tags to notes. Tags by default, then "Promote" to a note when you actually have something to write about without losing the hierarchy of tags.
 
 Suppose I have an `#Obsidian` tag and an `[[Obsidian]]` note. The benefit of the tag is that I can refer to subtags, e.g. `#Obsidian/Graph`, without having to refer to a dead / empty note, e.g. `[[Obsidian Graph]]`. The benefit of the note is that it's linkable and you can visualize the connections through the graph view.
 
@@ -97,12 +97,7 @@ The plugin reads every Markdown note in the vault to find tags and concept notes
 
 ## Installation
 
-The plugin is not in the community plugin directory yet. Install it with [BRAT](https://github.com/TfTHacker/obsidian42-brat):
-
-1. Install and enable **BRAT** from **Settings -> Community plugins**.
-2. Run **BRAT: Plugins: Add a beta plugin for testing** and enter `TheBoyRoy05/Obsidian-Unified-Tag-Links`.
-
-BRAT installs the latest release and keeps it updated.
+In **Settings -> Community plugins**, select **Browse**, search for **Unified Tag Links**, then select **Install** and **Enable**.
 
 Requires Obsidian 1.4.4 or later. Works on desktop and mobile.
 
